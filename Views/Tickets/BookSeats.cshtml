@@ -1,0 +1,114 @@
+﻿@model CinemaWebApplication.ViewModels.ScreeningViewModel
+
+<h2>Бронювання місць для @Model.Screening.Movie.Title - @Model.Screening.ScreeningTime</h2>
+
+<form asp-action="BookSeats" method="post">
+    <input type="hidden" name="screeningId" value="@Model.Screening.Id" />
+
+    <div class="seat-container">
+        <div class="screen">ЕКРАН</div>
+        <div class="price-info">
+            <span>Price: @Model.Screening.Price UAH</span>
+        </div>
+
+        <div class="seat-grid">
+            @foreach (var row in Model.Seats.GroupBy(s => s.Row))
+            {
+                <div class="seat-row">
+                    @foreach (var seat in row.OrderBy(s => s.Number))
+                    {
+                        <div class="seat @(seat.IsAvailable ? "available" : "unavailable")">
+                            @if (seat.IsAvailable)
+                            {
+                                <input type="checkbox" id="seat-@seat.Id" name="selectedSeats" value="@seat.Id" />
+                                <label for="seat-@seat.Id">@seat.Number</label>
+                            }
+                            else
+                            {
+                                <span class="occupied">@seat.Number</span>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Book tickets</button>
+</form>
+
+<style>
+    .seat-container {
+        text-align: center;
+    }
+
+    .screen {
+        width: 80%;
+        margin: 20px auto;
+        padding: 10px;
+        background-color: #ccc;
+        border-radius: 5px;
+    }
+
+    .price-info {
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .seat-grid {
+        display: inline-block;
+        text-align: left;
+    }
+
+    .seat-row {
+        display: flex;
+        justify-content: center;
+    }
+
+    .seat {
+        width: 30px;
+        height: 30px;
+        margin: 5px;
+        position: relative;
+    }
+
+        .seat input[type="checkbox"] {
+            display: none;
+        }
+
+        .seat label {
+            display: block;
+            width: 100%;
+            height: 100%;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .seat.available label {
+            background-color: #00f;
+        }
+
+        .seat.unavailable {
+            background-color: #f00;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .seat input[type="checkbox"]:checked + label {
+            background-color: #ff0;
+        }
+
+        .seat .occupied {
+            display: block;
+            width: 100%;
+            height: 100%;
+            line-height: 30px;
+            text-align: center;
+            background-color: #aaa;
+            border-radius: 5px;
+        }
+</style>

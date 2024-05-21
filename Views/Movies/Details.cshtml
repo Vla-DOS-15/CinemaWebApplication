@@ -1,0 +1,41 @@
+﻿@model CinemaWebApplication.Models.Movie
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Model.ImageUrl" class="img-fluid" alt="@Model.Title">
+        </div>
+        <div class="col-md-8">
+            <h1>@Model.Title</h1>
+            <p><strong>Опис:</strong> @Model.Description</p>
+            <p><strong>Дата випуску:</strong> @Model.ReleaseDate.ToShortDateString()</p>
+            <p><strong>Тривалість:</strong> @Model.Duration хв.</p>
+            <p><strong>Рейтинг:</strong> @Model.Rating</p>
+
+            <h4>Актори</h4>
+            <ul>
+                @foreach (var movieActor in Model.MovieActors)
+                {
+                    <li>
+                        <a href="@Url.Action("Details", "Actors", new { id = movieActor.Actor.Id })">@movieActor.Actor.Name</a>
+                    </li>
+                }
+            </ul>
+
+            <h4>Сеанси</h4>
+            <ul>
+                @foreach (var screening in Model.Screenings.OrderBy(s => s.ScreeningTime))
+                {
+                    <li>
+                        @screening.ScreeningTime.ToString("f")
+                        <a href="@Url.Action("BookSeats", "Tickets", new { id = screening.Id })" class="btn btn-primary btn-sm ml-2">Бронювати</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

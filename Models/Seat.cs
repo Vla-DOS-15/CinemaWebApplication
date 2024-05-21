@@ -9,4 +9,5 @@
         public int Number { get; set; }
         public bool IsAvailable { get; set; }
     }
+
 }

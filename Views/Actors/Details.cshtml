@@ -1,0 +1,28 @@
+﻿@model CinemaWebApplication.Models.Actor
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Model.ImageUrl" class="img-fluid" alt="@Model.Name">
+        </div>
+        <div class="col-md-8">
+            <h1>@Model.Name</h1>
+            <p><strong>Date of birth:</strong> @Model.Birthdate.ToShortDateString()</p>
+            <p><strong>Bio:</strong> @Model.Bio</p>
+
+            <h4>Movies with @Model.Name:</h4>
+            <ul>
+                @foreach (var movieActor in Model.MovieActors)
+                {
+                    <li>
+                        <a href="@Url.Action("Details", "Movies", new { id = movieActor.Movie.Id })">@movieActor.Movie.Title</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

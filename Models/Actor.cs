@@ -6,6 +6,7 @@
         public string Name { get; set; }
         public DateTime Birthdate { get; set; }
         public string Bio { get; set; }
+        public string ImageUrl { get; set; }
         public virtual ICollection<MovieActor> MovieActors { get; set; }
     }
 }

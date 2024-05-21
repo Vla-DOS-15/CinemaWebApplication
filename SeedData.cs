@@ -20,13 +20,15 @@ namespace CinemaWebApplication
                 {
                     Name = "Sample Actor 1",
                     Birthdate = new DateTime(1980, 1, 1),
-                    Bio = "Sample Bio 1"
+                    Bio = "Sample Bio 1",
+                    ImageUrl = "img"
                 };
                 var actor2 = new Actor
                 {
                     Name = "Sample Actor 2",
                     Birthdate = new DateTime(1990, 2, 2),
-                    Bio = "Sample Bio 2"
+                    Bio = "Sample Bio 2",
+                    ImageUrl = "img"
                 };
                 context.Actors.AddRange(actor1, actor2);
                 context.SaveChanges();
@@ -114,14 +116,12 @@ namespace CinemaWebApplication
                 {
                     MovieId = movie1.Id,
                     ScreeningTime = DateTime.Now.AddHours(1),
-                    Price = 100m,
                     Seats = new List<Seat>()
                 };
                 var screening2 = new Screening
                 {
                     MovieId = movie2.Id,
                     ScreeningTime = DateTime.Now.AddHours(2),
-                    Price = 120m,
                     Seats = new List<Seat>()
                 };
                 context.Screenings.AddRange(screening1, screening2);

@@ -8,4 +8,5 @@
         public int TotalTicketsSold { get; set; }
         public decimal TotalRevenue { get; set; }
     }
+
 }

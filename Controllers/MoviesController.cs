@@ -10,12 +10,15 @@ using CinemaWebApplication.Interfaces;
 
 namespace CinemaWebApplication.Controllers
 {
-    public class ScreeningsController : Controller
+    public class MoviesController : Controller
     {
         private readonly IScreeningService _screeningService;
+        private readonly ApplicationDbContext _context;
 
-        public ScreeningsController(IScreeningService screeningService)
+
+        public MoviesController(IScreeningService screeningService, ApplicationDbContext context)
         {
+            _context = context;
             _screeningService = screeningService;
         }
 
@@ -24,6 +27,22 @@ namespace CinemaWebApplication.Controllers
             var movies = await _screeningService.GetUpcomingScreeningsAsync();
             return View(movies);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var movie = await _screeningService.GetMovieByIdAsync(id);
+
+
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            return View(movie);
+        }
+
+
+        
     }
 
 }

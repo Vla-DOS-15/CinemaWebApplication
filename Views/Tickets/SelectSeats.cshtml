@@ -1,0 +1,29 @@
+﻿@model CinemaWebApplication.Models.Screening
+
+@{
+    ViewData["Title"] = "Select Seats";
+}
+
+<h2>@Model.Movie.Title - Select Seats</h2>
+
+<h3>Screening Time: @Model.ScreeningTime</h3>
+
+<form asp-action="Purchase" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <div>
+        <h4>Select Your Seats:</h4>
+        <div>
+            @foreach (var seat in Model.Seats)
+            {
+                <div>
+                    <label>
+                        <input type="checkbox" name="selectedSeats" value="@seat.Id" @(seat.IsAvailable ? "" : "disabled") />
+                        Row: @seat.Row, Seat: @seat.Number
+                    </label>
+                    @(seat.IsAvailable ? "" : "<span>(Unavailable)</span>")
+                </div>
+            }
+        </div>
+    </div>
+    <button type="submit">Purchase</button>
+</form>

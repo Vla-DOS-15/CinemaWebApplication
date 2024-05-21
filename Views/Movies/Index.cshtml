@@ -15,12 +15,11 @@
                     <div class="card-body">
                         <h5 class="card-title">@movie.Title</h5>
                         <p class="card-text">@movie.Description</p>
-                        <p class="card-text"><small class="text-muted">@movie.Genre</small></p>
+
                         <div class="mt-3">
                             <h6>Жанри:</h6>
                             @foreach (var movieGenre in movie.MovieGenres.OrderBy(s => s.Genre.Name))
                             {
-
                                 <span class="badge badge-primary" style="color: #464646;">@movieGenre.Genre.Name</span>
                                 
                             }

@@ -1,0 +1,44 @@
+﻿@model CinemaWebApplication.Models.Screening
+
+@{
+    ViewData["Title"] = "Purchase Tickets";
+}
+
+<h2>Purchase Tickets for @Model.Movie.Title</h2>
+
+<form id="purchaseForm" method="post" action="@Url.Action("ConfirmPayment", "Tickets", new { id = Model.Id })">
+    <div>
+        <h3>Selected Seats</h3>
+        <ul>
+            @foreach (var seatId in ViewBag.SelectedSeats)
+            {
+                <li>Seat ID: @seatId</li>
+                <input type="hidden" name="selectedSeats" value="@seatId" />
+            }
+        </ul>
+    </div>
+    <button type="submit">Confirm Payment</button>
+</form>
+
+<script>
+$(document).ready(function() {
+    $('#purchaseForm').submit(function(e) {
+        e.preventDefault();
+
+        // Отримати дані форми
+        var formData = $(this).serialize();
+
+        // Відправити POST-запит на сервер
+        $.post($(this).attr('action'), formData)
+            .done(function(response) {
+                // Обробити успішну відповідь від сервера
+                // Наприклад, перенаправити користувача на сторінку підтвердження
+                window.location.href = response.redirectUrl;
+            })
+            .fail(function() {
+                // Обробити помилку під час відправлення запиту
+                alert('An error occurred while processing your request. Please try again later.');
+            });
+    });
+});
+</script>

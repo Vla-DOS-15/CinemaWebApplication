@@ -46,10 +46,7 @@ namespace CinemaWebApplication
                 .WithOne(s => s.Movie)
                 .HasForeignKey(s => s.MovieId);
 
-            modelBuilder.Entity<Screening>()
-                .HasMany(s => s.Tickets)
-                .WithOne(t => t.Screening)
-                .HasForeignKey(t => t.ScreeningId);
+
 
             modelBuilder.Entity<Screening>()
                 .HasMany(s => s.Seats)

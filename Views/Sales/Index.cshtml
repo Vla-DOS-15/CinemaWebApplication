@@ -1,0 +1,32 @@
+﻿@model IEnumerable<CinemaWebApplication.Models.Sale>
+
+@{
+    ViewData["Title"] = "Sales";
+}
+
+<div class="container">
+    <h2>Sales</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Movie</th>
+                <th>Total Tickets Sold</th>
+                <th>Total Revenue</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sale in Model)
+            {
+                <tr>
+                    <td>@sale.Movie.Title</td>
+                    <td>@sale.TotalTicketsSold</td>
+                    <td>@sale.TotalRevenue.ToString("C")</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@sale.Id" class="btn btn-info">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using CinemaWebApplication.Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace CinemaWebApplication.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminMoviesController : Controller
     {
         private readonly IScreeningService _screeningService;
@@ -85,7 +87,8 @@ namespace CinemaWebApplication.Controllers
                     ReleaseDate = model.ReleaseDate,
                     Duration = model.Duration,
                     Rating = model.Rating,
-                    ImageUrl = model.ImageUrl
+                    ImageUrl = model.ImageUrl,
+                    TrailerUrl = model.TrailerUrl
                 };
 
                 _context.Movies.Add(movie);
@@ -139,6 +142,7 @@ namespace CinemaWebApplication.Controllers
                 Duration = movie.Duration,
                 Rating = movie.Rating,
                 ImageUrl = movie.ImageUrl,
+                TrailerUrl = movie.TrailerUrl,
                 SelectedActors = movie.MovieActors.Select(ma => ma.ActorId).ToList(),
                 SelectedGenres = movie.MovieGenres.Select(mg => mg.GenreId).ToList(),
                 Actors = await _context.Actors.Select(a => new SelectListItem
@@ -181,6 +185,7 @@ namespace CinemaWebApplication.Controllers
             movie.Duration = model.Duration;
             movie.Rating = model.Rating;
             movie.ImageUrl = model.ImageUrl;
+            movie.TrailerUrl = model.TrailerUrl;
 
             var existingActorIds = movie.MovieActors.Select(ma => ma.ActorId).ToList();
             var newActorIds = model.SelectedActors ?? new List<int>();

@@ -1,5 +1,6 @@
 ﻿using CinemaWebApplication.Models;
 using CinemaWebApplication.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -22,6 +23,7 @@ namespace CinemaWebApplication.Controllers
             return View(movies);
         }
 
+        [Authorize(Roles = "User, Admin")]
         public async Task<IActionResult> BookSeats(int id)
         {
             var screening = await _context.Screenings
@@ -43,6 +45,7 @@ namespace CinemaWebApplication.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "User, Admin")]
         [HttpPost]
         public async Task<IActionResult> BookSeats(int screeningId, int[] selectedSeats)
         {

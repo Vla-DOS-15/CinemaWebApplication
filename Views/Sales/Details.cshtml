@@ -1,0 +1,21 @@
+﻿@model CinemaWebApplication.Models.Sale
+
+@{
+    ViewData["Title"] = "Sale Details";
+}
+
+<div class="container">
+    <h2>Sale Details</h2>
+    <div>
+        <h4>@Model.Movie.Title</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">Total Tickets Sold</dt>
+            <dd class="col-sm-10">@Model.TotalTicketsSold</dd>
+
+            <dt class="col-sm-2">Total Revenue</dt>
+            <dd class="col-sm-10">@Model.TotalRevenue.ToString("C")</dd>
+        </dl>
+        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    </div>
+</div>

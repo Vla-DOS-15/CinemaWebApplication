@@ -25,6 +25,7 @@ namespace CinemaWebApplication.ViewModels
 
         [Required]
         public string ImageUrl { get; set; }
+        public string TrailerUrl { get; set; } // Додано
 
         public List<int> SelectedActors { get; set; }
         public List<int> SelectedGenres { get; set; }

@@ -27,24 +27,23 @@
                         {
                             if (User.IsInRole("User"))
                             {
-@*                                 <li class="nav-item header_button">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Cart"><i class="fa fa-shopping-cart" style="font-size: 20px"></i> Кошик</a>
-                                </li> *@
+ 
 
                             }
 
                             if (User.IsInRole("Admin"))
                             {
+
                                 <li class="nav-item header_button">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Users">Керування користувачами</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AdminMovies" asp-action="Index">Movies manager</a>
                                 </li>
 
                                 <li class="nav-item header_button">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Addcategory">Додати категорію</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Screenings" asp-action="Index">Screenings manager</a>
                                 </li>
 
                                 <li class="nav-item header_button">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AddSubcategory">Додати підкатегорію</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Sales" asp-action="Index">Sales</a>
                                 </li>
                             }
 

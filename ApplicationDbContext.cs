@@ -20,6 +20,9 @@ namespace CinemaWebApplication
         public DbSet<PersonalizedRecommendation> PersonalizedRecommendations { get; set; }
         public DbSet<Sale> Sales { get; set; }
         public DbSet<Seat> Seats { get; set; }
+        public DbSet<MovieGenre> MovieGenres { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -72,6 +75,20 @@ namespace CinemaWebApplication
                 .HasOne(s => s.Movie)
                 .WithMany()
                 .HasForeignKey(s => s.MovieId);
+
+
+            modelBuilder.Entity<MovieGenre>()
+                .HasKey(mg => new { mg.MovieId, mg.GenreId });
+
+            modelBuilder.Entity<MovieGenre>()
+                .HasOne(mg => mg.Movie)
+                .WithMany(m => m.MovieGenres)
+                .HasForeignKey(mg => mg.MovieId);
+
+            modelBuilder.Entity<MovieGenre>()
+                .HasOne(mg => mg.Genre)
+                .WithMany(g => g.MovieGenres)
+                .HasForeignKey(mg => mg.GenreId);
         }
     }
 }

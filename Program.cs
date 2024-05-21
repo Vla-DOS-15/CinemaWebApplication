@@ -1,4 +1,6 @@
 using CinemaWebApplication;
+using CinemaWebApplication.Interfaces;
+using CinemaWebApplication.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +26,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                     options.LoginPath = new PathString("/Account/Login");
                 });
 
+builder.Services.AddScoped<IScreeningService, ScreeningService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -44,5 +48,20 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Ensure database is seeded.
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        SeedData.Initialize(services);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred seeding the DB.");
+    }
+}
 
 app.Run();

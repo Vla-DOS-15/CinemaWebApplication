@@ -9,7 +9,10 @@
         public DateTime ReleaseDate { get; set; }
         public int Duration { get; set; }
         public float Rating { get; set; }
+        public string ImageUrl { get; set; }
         public virtual ICollection<MovieActor> MovieActors { get; set; }
         public virtual ICollection<Screening> Screenings { get; set; }
+        public virtual ICollection<MovieGenre> MovieGenres { get; set; }
+
     }
 }

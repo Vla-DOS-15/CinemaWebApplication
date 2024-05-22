@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CinemaWebApplication.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <header>
@@ -27,13 +28,16 @@
                         {
                             if (User.IsInRole("User"))
                             {
- 
-
+                                <li class="nav-item header_button">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="PersonalizedRecommendations">Personalized recommendations</a>
+                                </li>
                             }
 
                             if (User.IsInRole("Admin"))
                             {
-
+                                <li class="nav-item header_button">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="PersonalizedRecommendations">Personalized recommendations</a>
+                                </li>
                                 <li class="nav-item header_button">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="AdminMovies" asp-action="Index">Movies manager</a>
                                 </li>
@@ -45,22 +49,25 @@
                                 <li class="nav-item header_button">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Sales" asp-action="Index">Sales</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("Index", "Statistics")">Statistics</a>
+                                </li>
                             }
 
                             <li class="nav-item header_button">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@User.Identity.Name</a>
                             </li>
                             <li class="nav-item header_button">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout"><i class="fa fa-sign-out" style="font-size: 20px"></i> Вийти</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout"><i class="fa fa-sign-out" style="font-size: 20px"></i> Logout</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item header_button" style="margin-left: auto">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login"><i class="fa fa-sign-in" style="font-size: 20px"></i> Увійти</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login"><i class="fa fa-sign-in" style="font-size: 20px"></i> Login</a>
                             </li>
                             <li class="nav-item header_button">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register"><i class="fa fa-user-plus" style="font-size: 20px"></i> Зареєструватись</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register"><i class="fa fa-user-plus" style="font-size: 20px"></i> Sign up</a>
                             </li>
                         }
                     </ul>

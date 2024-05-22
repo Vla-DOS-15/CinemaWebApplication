@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using CinemaWebApplication.Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using CinemaWebApplication.Services;
 
 
 namespace CinemaWebApplication.Controllers
@@ -16,13 +17,15 @@ namespace CinemaWebApplication.Controllers
     public class AdminMoviesController : Controller
     {
         private readonly IScreeningService _screeningService;
+        private readonly IMoviesService _moviesService;
         private readonly ApplicationDbContext _context;
 
 
-        public AdminMoviesController(IScreeningService screeningService, ApplicationDbContext context)
+        public AdminMoviesController(IScreeningService screeningService, ApplicationDbContext context, IMoviesService moviesService)
         {
             _context = context;
             _screeningService = screeningService;
+            _moviesService = moviesService;
         }
 
         // GET: Movies
@@ -38,14 +41,8 @@ namespace CinemaWebApplication.Controllers
             {
                 return NotFound();
             }
-
-            var movie = await _context.Movies
-                .Include(m => m.MovieActors)
-                    .ThenInclude(ma => ma.Actor)
-                .Include(m => m.MovieGenres)
-                    .ThenInclude(mg => mg.Genre)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var movie = _moviesService.Details(id);
+            
             if (movie == null)
             {
                 return NotFound();
@@ -79,41 +76,10 @@ namespace CinemaWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MovieViewModel model)
         {
-            
-                var movie = new Movie
-                {
-                    Title = model.Title,
-                    Description = model.Description,
-                    ReleaseDate = model.ReleaseDate,
-                    Duration = model.Duration,
-                    Rating = model.Rating,
-                    ImageUrl = model.ImageUrl,
-                    TrailerUrl = model.TrailerUrl
-                };
+            if(model != null)
+                _moviesService.Create(model);
 
-                _context.Movies.Add(movie);
-                await _context.SaveChangesAsync();
-
-                // Додавання зв'язків з акторами та жанрами
-                if (model.SelectedActors != null)
-                {
-                    foreach (var actorId in model.SelectedActors)
-                    {
-                        _context.MovieActors.Add(new MovieActor { MovieId = movie.Id, ActorId = actorId });
-                    }
-                }
-
-                if (model.SelectedGenres != null)
-                {
-                    foreach (var genreId in model.SelectedGenres)
-                    {
-                        _context.MovieGenres.Add(new MovieGenre { MovieId = movie.Id, GenreId = genreId });
-                    }
-                }
-
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            
+            return RedirectToAction(nameof(Index));            
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -164,73 +130,12 @@ namespace CinemaWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, MovieViewModel model)
         {
-            if (id != model.Id)
-            {
+            if (id != model.Id)            
                 return NotFound();
-            }
             
-            var movie = await _context.Movies
-                .Include(m => m.MovieActors)
-                .Include(m => m.MovieGenres)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var movie = _moviesService.Edit(id, model);
 
-            if (movie == null)
-            {
-                return NotFound();
-            }
-
-            movie.Title = model.Title;
-            movie.Description = model.Description;
-            movie.ReleaseDate = model.ReleaseDate;
-            movie.Duration = model.Duration;
-            movie.Rating = model.Rating;
-            movie.ImageUrl = model.ImageUrl;
-            movie.TrailerUrl = model.TrailerUrl;
-
-            var existingActorIds = movie.MovieActors.Select(ma => ma.ActorId).ToList();
-            var newActorIds = model.SelectedActors ?? new List<int>();
-
-            var actorsToAdd = newActorIds.Except(existingActorIds).ToList();
-            var actorsToRemove = existingActorIds.Except(newActorIds).ToList();
-
-            foreach (var actorId in actorsToAdd)
-            {
-                _context.MovieActors.Add(new MovieActor { MovieId = movie.Id, ActorId = actorId });
-            }
-
-            foreach (var actorId in actorsToRemove)
-            {
-                var actorToRemove = movie.MovieActors.FirstOrDefault(ma => ma.ActorId == actorId);
-                if (actorToRemove != null)
-                {
-                    _context.MovieActors.Remove(actorToRemove);
-                }
-            }
-
-            var existingGenreIds = movie.MovieGenres.Select(mg => mg.GenreId).ToList();
-            var newGenreIds = model.SelectedGenres ?? new List<int>();
-
-            var genresToAdd = newGenreIds.Except(existingGenreIds).ToList();
-            var genresToRemove = existingGenreIds.Except(newGenreIds).ToList();
-
-            foreach (var genreId in genresToAdd)
-            {
-                _context.MovieGenres.Add(new MovieGenre { MovieId = movie.Id, GenreId = genreId });
-            }
-
-            foreach (var genreId in genresToRemove)
-            {
-                var genreToRemove = movie.MovieGenres.FirstOrDefault(mg => mg.GenreId == genreId);
-                if (genreToRemove != null)
-                {
-                    _context.MovieGenres.Remove(genreToRemove);
-                }
-            }
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
-            
+            return RedirectToAction(nameof(Index));            
         }
 
 
@@ -257,20 +162,9 @@ namespace CinemaWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
-            {
-                return NotFound();
-            }
+            _moviesService.Delete(id);
 
-            _context.Movies.Remove(movie);
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool MovieExists(int id)
-        {
-            return _context.Movies.Any(e => e.Id == id);
         }
     }
 }

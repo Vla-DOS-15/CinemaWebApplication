@@ -14,6 +14,7 @@ namespace CinemaWebApplication
                 {
                     return; // База даних вже ініціалізована
                 }
+               
 
                 // Додавання акторів
                 var actor1 = new Actor
@@ -42,7 +43,11 @@ namespace CinemaWebApplication
                 {
                     Name = "Drama"
                 };
-                context.Genres.AddRange(genre1, genre2);
+                var genre3 = new Genre
+                {
+                    Name = "Fantasy"
+                };
+                context.Genres.AddRange(genre1, genre2, genre3);
                 context.SaveChanges();
 
                 // Додавання фільмів
@@ -53,7 +58,8 @@ namespace CinemaWebApplication
                     ReleaseDate = DateTime.Now.AddMonths(-1),
                     Duration = 120,
                     Rating = 4.5f,
-                    ImageUrl = "image1.jpg",
+                    ImageUrl = "https://lux.fm/uploads/media_news/2023/07/64c7bf453921d854780893.jpg?w=400&fit=cover&output=webp&q=85",
+                    TrailerUrl = "https://youtu.be/4pcusbhhfQA",
                     MovieActors = new List<MovieActor>(),
                     MovieGenres = new List<MovieGenre>(),
                     Screenings = new List<Screening>()
@@ -65,7 +71,8 @@ namespace CinemaWebApplication
                     ReleaseDate = DateTime.Now.AddMonths(-2),
                     Duration = 150,
                     Rating = 4.0f,
-                    ImageUrl = "image2.jpg",
+                    ImageUrl = "https://static.hdrezka.ac/i/2023/6/14/l31bdcc5c6c24ig40c87l.png",
+                    TrailerUrl = "https://youtu.be/4pcusbhhfQA",
                     MovieActors = new List<MovieActor>(),
                     MovieGenres = new List<MovieGenre>(),
                     Screenings = new List<Screening>()
@@ -108,7 +115,12 @@ namespace CinemaWebApplication
                     MovieId = movie2.Id,
                     GenreId = genre1.Id
                 };
-                context.MovieGenres.AddRange(movieGenre1, movieGenre2, movieGenre3);
+                var movieGenre4 = new MovieGenre
+                {
+                    MovieId = movie2.Id,
+                    GenreId = genre3.Id
+                };
+                context.MovieGenres.AddRange(movieGenre1, movieGenre2, movieGenre3, movieGenre4);
                 context.SaveChanges();
 
                 // Додавання сеансів
@@ -149,6 +161,16 @@ namespace CinemaWebApplication
                         context.Seats.AddRange(seat1, seat2);
                     }
                 }
+                context.SaveChanges();
+
+                context.Users.Add(
+                    new User {
+                        Username = "Admin",
+                        Email = "admin@gmail.com",
+                        Password = "1234",
+                        RegistrationDate = DateTime.Now,
+                        RoleName = "Admin"
+                    });
                 context.SaveChanges();
             }
         }

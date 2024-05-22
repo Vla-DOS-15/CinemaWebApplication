@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using CinemaWebApplication.ViewModels;
-using CinemaWebApplication.Models; 
+using CinemaWebApplication.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace CinemaWebApplication.Controllers
 {
@@ -16,33 +17,36 @@ namespace CinemaWebApplication.Controllers
         {
             _context = context;
         }
+
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
-                if (user != null)
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                if (user != null && BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
                 {
                     await Authenticate(model.Email);
-
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Movies");
                 }
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                ModelState.AddModelError("", "Невірний логін або пароль");
             }
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
@@ -52,15 +56,24 @@ namespace CinemaWebApplication.Controllers
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    _context.Users.Add(new User { Username = model.Username, Email = model.Email, Password = model.Password, RoleName = "User" });
-                    _context.SaveChanges();
+                    // Hash the password
+                    var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
-                    await Authenticate(model.Email); 
+                    _context.Users.Add(new User
+                    {
+                        Username = model.Username,
+                        Email = model.Email,
+                        Password = hashedPassword,
+                        RegistrationDate = DateTime.Now,
+                        RoleName = "User"
+                    });
+                    await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Index", "Home");
+                    await Authenticate(model.Email);
+
+                    return RedirectToAction("Index", "Movies");
                 }
-                else
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                ModelState.AddModelError("", "Користувач з такою електронною поштою вже існує");
             }
             return View(model);
         }

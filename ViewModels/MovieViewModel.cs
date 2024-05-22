@@ -21,11 +21,11 @@ namespace CinemaWebApplication.ViewModels
         public int Duration { get; set; }
 
         [Required]
-        public float Rating { get; set; }
+        public double Rating { get; set; }
 
         [Required]
         public string ImageUrl { get; set; }
-        public string TrailerUrl { get; set; } // Додано
+        public string TrailerUrl { get; set; }
 
         public List<int> SelectedActors { get; set; }
         public List<int> SelectedGenres { get; set; }

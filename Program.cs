@@ -27,6 +27,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                 });
 
 builder.Services.AddScoped<IScreeningService, ScreeningService>();
+builder.Services.AddScoped<IMoviesService, MoviesService>();
+builder.Services.AddScoped<PaymentService>();
 
 var app = builder.Build();
 
@@ -47,7 +49,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Movies}/{action=Index}/{id?}");
 
 // Ensure database is seeded.
 using (var scope = app.Services.CreateScope())

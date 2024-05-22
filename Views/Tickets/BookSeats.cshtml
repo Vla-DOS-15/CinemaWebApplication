@@ -1,12 +1,11 @@
 ﻿@model CinemaWebApplication.ViewModels.ScreeningViewModel
 
-<h2>Бронювання місць для @Model.Screening.Movie.Title - @Model.Screening.ScreeningTime</h2>
+<h2>Reservation of seats for @Model.Screening.Movie.Title - @Model.Screening.ScreeningTime</h2>
 
 <form asp-action="BookSeats" method="post">
     <input type="hidden" name="screeningId" value="@Model.Screening.Id" />
 
     <div class="seat-container">
-        <div class="screen">ЕКРАН</div>
         <div class="price-info">
             <span>Price: @Model.Screening.Price UAH</span>
         </div>
@@ -112,3 +111,10 @@
             border-radius: 5px;
         }
 </style>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

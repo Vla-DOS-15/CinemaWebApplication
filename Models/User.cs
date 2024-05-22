@@ -10,5 +10,6 @@
         public string RoleName { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<PersonalizedRecommendation> PersonalizedRecommendations { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; }
     }
 }

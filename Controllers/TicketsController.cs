@@ -49,13 +49,11 @@ namespace CinemaWebApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> BookSeats(int screeningId, int[] selectedSeats)
         {
-            
-
             if (selectedSeats == null || selectedSeats.Length == 0)
             {
                 return BadRequest("No seats selected.");
             }
-
+            var ticketCount = selectedSeats.Length;
             var seats = await _context.Seats
                 .Where(s => selectedSeats.Contains(s.Id) && s.IsAvailable)
                 .ToListAsync();
@@ -72,18 +70,22 @@ namespace CinemaWebApplication.Controllers
             }
 
             var screening = await _context.Screenings.FirstOrDefaultAsync(s => s.Id == screeningId);
-            decimal totalPrice = screening.Price * seats.Count;
+            double totalPrice = screening.Price * seats.Count;
 
+            // Створюємо квитки та оновлюємо доступність місць
+            var tickets = new List<Ticket>();
             foreach (var seat in seats)
             {
                 seat.IsAvailable = false;
 
-                _context.Tickets.Add(new Ticket
+                var ticket = new Ticket
                 {
                     ScreeningId = screeningId,
                     UserId = user.Id,
                     PurchaseDate = DateTime.Now
-                });
+                };
+                tickets.Add(ticket);
+                _context.Tickets.Add(ticket);
             }
 
             var sale = await _context.Sales.FirstOrDefaultAsync(s => s.MovieId == screening.MovieId);
@@ -103,9 +105,9 @@ namespace CinemaWebApplication.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Details", "Movies", new { id = screening.MovieId });
+            // Перенаправляємо на сторінку оплати з потрібними параметрами
+            return RedirectToAction("Create", "Payments", new { screeningId, ticketCount, amount = totalPrice });
         }
-
 
         // Перегляд деталей фільму та розкладу сеансів
         public async Task<IActionResult> Details(int id)

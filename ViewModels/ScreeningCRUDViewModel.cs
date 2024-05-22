@@ -14,7 +14,7 @@ namespace CinemaWebApplication.ViewModels
 
         [Required]
         [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid price")]
-        public decimal Price { get; set; }
+        public double Price { get; set; }
 
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Please enter a valid number of rows")]

@@ -13,7 +13,7 @@
             <h1>@Model.Title</h1>
             <p><strong>Опис:</strong> @Model.Description</p>
             <p><strong>Дата випуску:</strong> @Model.ReleaseDate.ToShortDateString()</p>
-            <p><strong>Тривалість:</strong> @Model.Duration хв.</p>
+            <p><strong>Тривалість:</strong> @Model.Duration m.</p>
             <p><strong>Рейтинг:</strong> @Model.Rating</p>
 
             <h4>Актори</h4>
@@ -32,11 +32,13 @@
                 {
                     <li>
                         @screening.ScreeningTime.ToString("f")
-                        <a href="@Url.Action("BookSeats", "Tickets", new { id = screening.Id })" class="btn btn-primary btn-sm ml-2">Бронювати</a>
+                        <a href="@Url.Action("BookSeats", "Tickets", new { id = screening.Id })" class="btn btn-primary btn-sm ml-2">Book a ticket</a>
                     </li>
                 }
             </ul>
         </div>
         <iframe width="560" height="600" src="@Model.TrailerUrl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
     </div>
 </div>

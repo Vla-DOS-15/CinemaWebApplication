@@ -6,7 +6,7 @@
         public int MovieId { get; set; }
         public virtual Movie Movie { get; set; }
         public int TotalTicketsSold { get; set; }
-        public decimal TotalRevenue { get; set; }
+        public double TotalRevenue { get; set; }
     }
 
 }

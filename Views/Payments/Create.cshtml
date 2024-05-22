@@ -1,0 +1,48 @@
+﻿@model CinemaWebApplication.ViewModels.PaymentViewModel
+
+@{
+    ViewData["Title"] = "Оплата";
+}
+
+<h2>Оплата</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="ScreeningId" class="control-label"></label>
+        <input asp-for="ScreeningId" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="MovieTitle" class="control-label"></label>
+        <input asp-for="MovieTitle" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="TicketCount" class="control-label"></label>
+        <input asp-for="TicketCount" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Amount" class="control-label"></label>
+        <input asp-for="Amount" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="CardNumber" class="control-label"></label>
+        <input asp-for="CardNumber" class="form-control" />
+        <span asp-validation-for="CardNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CVV" class="control-label"></label>
+        <input asp-for="CVV" class="form-control" />
+        <span asp-validation-for="CVV" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ExpiryDate" class="control-label"></label>
+        <input asp-for="ExpiryDate" class="form-control" />
+        <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Оплатити</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

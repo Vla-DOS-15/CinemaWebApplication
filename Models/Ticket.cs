@@ -8,5 +8,7 @@
         public int UserId { get; set; }
         public virtual User User { get; set; }
         public DateTime PurchaseDate { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; }
+
     }
 }

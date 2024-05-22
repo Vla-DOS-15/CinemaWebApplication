@@ -1,0 +1,30 @@
+﻿@model IEnumerable<CinemaWebApplication.ViewModels.PaymentStatisticsViewModel>
+
+@{
+    ViewData["Title"] = "Ticket Booking Statistics";
+}
+
+<div class="container">
+    <h2>Ticket Booking Statistics</h2>
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Movie Title</th>
+                    <th>Total Tickets Sold</th>
+                    <th>Total Revenue</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stat in Model)
+                {
+                    <tr>
+                        <td>@stat.MovieTitle</td>
+                        <td>@stat.TotalTicketsSold</td>
+                        <td>@stat.TotalRevenue.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

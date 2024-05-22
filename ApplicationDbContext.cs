@@ -1,4 +1,5 @@
-﻿using CinemaWebApplication.Models;
+﻿using CinemaWebApplication.Controllers;
+using CinemaWebApplication.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CinemaWebApplication
@@ -22,6 +23,7 @@ namespace CinemaWebApplication
         public DbSet<Seat> Seats { get; set; }
         public DbSet<MovieGenre> MovieGenres { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -86,6 +88,20 @@ namespace CinemaWebApplication
                 .HasOne(mg => mg.Genre)
                 .WithMany(g => g.MovieGenres)
                 .HasForeignKey(mg => mg.GenreId);
+
+            // Відміна каскадного видалення для зв'язку між Payments і Users
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.User)
+                .WithMany(u => u.Payments)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict); // або .OnDelete(DeleteBehavior.NoAction)
+
+            // Відміна каскадного видалення для зв'язку між Payments і Tickets
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.Ticket)
+                .WithMany(t => t.Payments)
+                .HasForeignKey(p => p.TicketId)
+                .OnDelete(DeleteBehavior.Restrict); // або .OnDelete(DeleteBehavior.NoAction)
         }
     }
 }
